@@ -3,6 +3,7 @@ import urllib
 import re
 import json
 import time
+import members
 
 # 记录签到情况的set
 check = set()
@@ -114,11 +115,14 @@ def show(users, check):
 
 # 读取之前的签到情况
 def readStatus():
-    fileRead = open('status.txt', 'r')
+    fileRead = open('checked.txt', 'r')
     ISOTIMEFORMAT = '%Y-%m-%dT%XZ'
     today = time.strftime(ISOTIMEFORMAT, time.localtime())
     curDate = fileRead.readline()
     done = 0
+    # 初始化新文件
+    if curDate == '':
+        return
     # 判断是不是today保存过的签到情况，如果是则读取信息
     if int(curDate[:4]) == int(today[:4]) and int(curDate[5:7]) == int(today[5:7]) and int(curDate[8:10]) == int(today[8:10]):
         while not done:
@@ -133,7 +137,7 @@ def readStatus():
     
 # 保存统计结果
 def saveStatus():
-    fileWrite = open('status.txt', 'w')
+    fileWrite = open('checked.txt', 'w')
     # 打时间戳
     ISOTIMEFORMAT = '%Y-%m-%dT%XZ'
     today = time.strftime(ISOTIMEFORMAT, time.localtime())
@@ -146,6 +150,8 @@ def saveStatus():
     fileWrite.close()
 
 
+# 保存当前仍未签到的ID
+
 def __main__():
     commits = getJson(gitHubCommitsApi)
     fileName = 'commits.json'
@@ -155,6 +161,6 @@ def __main__():
     checkTimes(users)
     saveStatus()
     show(users, check)
-
+    members.readIDs('https://api.github.com/orgs/aplusb/members')
 
 __main__()
