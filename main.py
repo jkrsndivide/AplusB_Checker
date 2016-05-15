@@ -53,7 +53,7 @@ class User:
         self.date = date
     
 # GitHub Api URL
-gitHubCommitsApi = 'https://api.github.com/repos/aplusb/Let-the-bass-kick/commits'
+gitHubCommitsApi = 'https://api.github.com/repos/aplusb/ACEveryDay/commits'
 
 # 获取json
 def getJson(url):
